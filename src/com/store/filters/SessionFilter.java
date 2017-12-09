@@ -20,8 +20,7 @@ import javax.servlet.http.HttpSession;
  * @version 2017-10-28
  * 
  */
-@WebFilter(servletNames = { "com.store.controllers.AccountControllerServlet", 
-		"com.store.controllers.LoginControllerServlet" })
+@WebFilter(servletNames = { "com.store.controllers.AccountControllerServlet", "com.store.controllers.LoginControllerServlet" })
 public class SessionFilter implements Filter {
 
     FilterConfig filterConfig;

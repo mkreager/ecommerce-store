@@ -15,21 +15,21 @@ import org.glassfish.jersey.SslConfigurator;
  *
  */
 public final class Handshake extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 	
-	/**
+    /**
      * Load the server (web service) key from local (web tier) storage into trust store to create SSL context.
      *   
      * @param sc The servlet context
      * @return sslContext
      */
-	public static SSLContext getSslContext(ServletContext sc) {
-		// Load SSL key to perform handshake with the server
-		String kpath = sc.getRealPath("/keystore.p12");
-		SslConfigurator sslConfig = SslConfigurator.newInstance()
-				.trustStoreFile(kpath)
-				.trustStorePassword("password");
-		SSLContext sslContext = sslConfig.createSSLContext();
-		return sslContext;
-	}
+    public static SSLContext getSslContext(ServletContext sc) {
+	// Load SSL key to perform handshake with the server
+	String kpath = sc.getRealPath("/keystore.p12");
+	SslConfigurator sslConfig = SslConfigurator.newInstance()
+		.trustStoreFile(kpath)
+		.trustStorePassword("password");
+	SSLContext sslContext = sslConfig.createSSLContext();
+	return sslContext;
+    }
 }

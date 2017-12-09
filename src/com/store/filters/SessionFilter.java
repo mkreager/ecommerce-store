@@ -24,27 +24,25 @@ import javax.servlet.http.HttpSession;
 		"com.store.controllers.LoginControllerServlet" })
 public class SessionFilter implements Filter {
 
-	FilterConfig filterConfig;
+    FilterConfig filterConfig;
 	
-	public void init(FilterConfig fConfig) throws ServletException {
-		this.filterConfig = fConfig;
-	}
+    public void init(FilterConfig fConfig) throws ServletException {
+	this.filterConfig = fConfig;
+    }
 	
-	public void destroy() {
-		
-	}
-
+    public void destroy() {	
+    }
 	
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {    
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {    
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
         HttpSession session = req.getSession();
         if (session.getAttribute("username") != null) {
-        	session.setAttribute("message", "You're already logged in.");
+            session.setAttribute("message", "You're already logged in.");
             res.sendRedirect(req.getContextPath() + "/store");
         } else {
             chain.doFilter(request, response);
         }
-	}
+    }
 }

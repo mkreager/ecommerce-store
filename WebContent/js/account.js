@@ -1,6 +1,5 @@
 /* 
  * Copyright (C) 2017- I MUSIC - All Rights Reserved
- *  
  * 
  * Version 1.0
  * Author: Mike Kreager
@@ -15,9 +14,9 @@
 
 // Copy billing information to shipping information
 $(document).ready(function() {
-	$("#sameAsBilling").on("change", function(){
-	  if (this.checked) {
-		$("[id='shippingFullName']").val($("[id='billingFullName']").val());
+    $("#sameAsBilling").on("change", function(){
+        if (this.checked) {
+	    $("[id='shippingFullName']").val($("[id='billingFullName']").val());
 	    $("[id='shippingAddressLine1']").val($("[id='billingAddressLine1']").val());
 	    $("[id='shippingAddressLine2']").val($("[id='billingAddressLine2']").val());
 	    $("[id='shippingCity']").val($("[id='billingCity']").val());
@@ -25,6 +24,6 @@ $(document).ready(function() {
 	    $("[id='shippingCountry']").val($("[id='billingCountry']").val());
 	    $("[id='shippingZip']").val($("[id='billingZip']").val());
 	    $("[id='shippingPhone']").val($("[id='billingPhone']").val());
-	  }
-	});
+        }
+    });
 });

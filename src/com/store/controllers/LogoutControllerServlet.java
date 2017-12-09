@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet("/logout")
 public class LogoutControllerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -27,16 +27,15 @@ public class LogoutControllerServlet extends HttpServlet {
         super();
     }
 
-	/**
-	 * Log the user out and invalidate the session
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Get the session and invalidate it
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-		    session.invalidate();
-		}
-		
-		response.sendRedirect(request.getContextPath() + "/store");
+    /**
+     * Log the user out and invalidate the session
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	// Get the session and invalidate it
+	HttpSession session = request.getSession(false);
+	if (session != null) {
+	    session.invalidate();
 	}
+	response.sendRedirect(request.getContextPath() + "/store");
+    }
 }

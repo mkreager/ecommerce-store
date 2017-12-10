@@ -31,7 +31,7 @@ import com.store.utils.*;
  */
 @WebServlet("/login")
 public class LoginControllerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -40,73 +40,72 @@ public class LoginControllerServlet extends HttpServlet {
         super();
     }
 
-	/**
-	 * Respond to get requests with forward to the login page
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp");  
-	    dispatcher.forward(request, response);
-	}
+    /**
+     * Respond to get requests with forward to the login page
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp");  
+	dispatcher.forward(request, response);
+    }
 
-	/**
-	 * Check password/email combination with the Account service, and log the user in (create a session)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Get the form inputs
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
-		
-		// Get the session
-		HttpSession session = request.getSession();
-		
-		// Create the API client and invoke the request
-		ServletContext sc = this.getServletContext();
-		Client client = ClientBuilder.newBuilder().sslContext(Handshake.getSslContext(sc)).build();
-		Response resp = client.target(Paths.LOGIN)
-        	.queryParam("username", email)
-        	.queryParam("password", encodedPassword)
-        	.request(MediaType.TEXT_PLAIN_TYPE)
-        	.accept(MediaType.APPLICATION_JSON)
+    /**
+     * Check password/email combination with the Account service, and log the user in (create a session)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	// Get the form inputs
+	String email = request.getParameter("email");
+	String password = request.getParameter("password");
+	String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
+
+	// Get the session
+	HttpSession session = request.getSession();
+
+	// Create the API client and invoke the request
+	ServletContext sc = this.getServletContext();
+	Client client = ClientBuilder.newBuilder().sslContext(Handshake.getSslContext(sc)).build();
+	Response resp = client.target(Paths.LOGIN)
+	    .queryParam("username", email)
+	    .queryParam("password", encodedPassword)
+	    .request(MediaType.TEXT_PLAIN_TYPE)
+	    .accept(MediaType.APPLICATION_JSON)
             .get();
 		
-		// Check the response
+	// Check the response
         int code = resp.getStatus();
         
         // Login if the code is 200, otherwise send the error message to the client
         if (code == 200) {
-        	session.setAttribute("message", "Login successful");
-        	session.setAttribute("username", email);  
-        	session.setAttribute("password", encodedPassword);
-        	// Check if the login request came from an order checkout attempt and redirect accordingly
-        	String checkout = (String) session.getAttribute("checkout");
-        	if (checkout != null && checkout.equals("true")) {
-        		session.setAttribute("checkout", null);
-        		response.sendRedirect(request.getContextPath() + "/order");
-        	} else {
-        		response.sendRedirect(request.getContextPath() + "/store");
-        	}
+            session.setAttribute("message", "Login successful");
+            session.setAttribute("username", email);  
+            session.setAttribute("password", encodedPassword);
+            // Check if the login request came from an order checkout attempt and redirect accordingly
+            String checkout = (String) session.getAttribute("checkout");
+            if (checkout != null && checkout.equals("true")) {
+        	session.setAttribute("checkout", null);
+        	response.sendRedirect(request.getContextPath() + "/order");
+            } else {
+        	response.sendRedirect(request.getContextPath() + "/store");
+            }
         } else if (code == 400 || code == 404) {
-        	String responseStr = resp.readEntity(String.class);
-        	StringReader stringReader = new StringReader(responseStr);
-        	JsonReader reader = Json.createReader(stringReader);
-        	String message = reader.readObject().getString("message");
-        	session.setAttribute("message", message);
-        	response.sendRedirect(request.getContextPath() + "/login");
+            String responseStr = resp.readEntity(String.class);
+            StringReader stringReader = new StringReader(responseStr);
+            JsonReader reader = Json.createReader(stringReader);
+            String message = reader.readObject().getString("message");
+            session.setAttribute("message", message);
+            response.sendRedirect(request.getContextPath() + "/login");
         } else if (code == 401) {
-        	session.setAttribute("message", "Unauthorized.");
-        	response.sendRedirect(request.getContextPath() + "/login");
+            session.setAttribute("message", "Unauthorized.");
+            response.sendRedirect(request.getContextPath() + "/login");
         } else if (code == 403) {
-        	session.setAttribute("message", "Forbidden.");
-        	response.sendRedirect(request.getContextPath() + "/login");
+            session.setAttribute("message", "Forbidden.");
+            response.sendRedirect(request.getContextPath() + "/login");
         } else if (code == 500) {
-        	session.setAttribute("message", "Database or server error occurred.");
-        	response.sendRedirect(request.getContextPath() + "/login");
+            session.setAttribute("message", "Database or server error occurred.");
+            response.sendRedirect(request.getContextPath() + "/login");
         } else {
-        	session.setAttribute("message", "Something went wrong.");
-        	response.sendRedirect(request.getContextPath() + "/login");
+            session.setAttribute("message", "Something went wrong.");
+            response.sendRedirect(request.getContextPath() + "/login");
         }
         resp.close();
-	}
-
+    }
 }
